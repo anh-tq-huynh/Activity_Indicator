@@ -12,12 +12,15 @@ class Semaphore
 {
 	public:
 		Semaphore();
-		virtual ~Semaphore() = delete;
-		void receive();
-		void send();
+		virtual ~Semaphore() = default;
+		void give() const;
+
+		bool sem_available() const;
+
+		void take();
 	private:
 		SemaphoreHandle_t binary_semaphore;
-		BaseType_t HigherPriorityTaskWoken = pdFALSE;
+		BaseType_t semaphore_status;
 };
 
 

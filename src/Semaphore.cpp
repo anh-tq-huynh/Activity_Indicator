@@ -7,16 +7,22 @@
 Semaphore::Semaphore()
 {
 	binary_semaphore = xSemaphoreCreateBinary();
+	semaphore_status = pdFALSE;
 }
 
-void Semaphore::receive()
+void Semaphore::take()
 {
-	xSemaphoreTake(binary_semaphore, pdMS_TO_TICKS(200));
+	semaphore_status = xSemaphoreTake(binary_semaphore, portMAX_DELAY);
 }
 
-void Semaphore::send()
+void Semaphore::give() const
 {
-	xSemaphoreGiveFromISR(binary_semaphore, &HigherPriorityTaskWoken);
+	xSemaphoreGive(binary_semaphore);
+}
+
+bool Semaphore::sem_available() const
+{
+	return semaphore_status == pdPASS;
 }
 
 
